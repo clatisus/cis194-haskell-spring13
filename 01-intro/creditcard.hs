@@ -42,7 +42,7 @@ doubleEveryOtherV3 = reverse . map snd . map multiplyOddPosition . zip [0..] . r
 
 multiplyOddPosition :: (Integer, Integer) -> (Integer, Integer)
 multiplyOddPosition (x, y)
-  | odd x = (x, 2 * y)
+  | odd x     = (x, 2 * y)
   | otherwise = (x, y)
 
 sumDigitsV2 :: [Integer] -> Integer
