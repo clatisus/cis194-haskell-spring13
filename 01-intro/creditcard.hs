@@ -1,4 +1,8 @@
---
+{-# OPTIONS_GHC -Wall #-}
+
+module CreditCard where
+
+-- Exercise 1
 -- Example: toDigits 1234 == [1,2,3,4]
 -- Example: toDigitsRev 1234 == [4,3,2,1]
 -- Example: toDigits 0 == []
@@ -11,7 +15,7 @@ toDigitsRev n
   | n > 0 = (n `mod` 10) : toDigitsRev (n `div` 10)
   | otherwise = []
 
---
+-- Exercise 2
 -- Example: doubleEveryOther [8, 7, 6, 5] == [16, 7, 12, 5]
 -- Example: doubleEveryOther [1, 2, 3] == [1, 4, 3]
 -- Example: doubleEveryOther [1, 2, 3, 4] == [2, 2, 6, 4]
@@ -19,12 +23,12 @@ doubleEveryOther :: [Integer] -> [Integer]
 doubleEveryOther = reverse . zipWith (*) oneTwo . reverse
   where oneTwo = 1 : 2 : oneTwo
 
---
+-- Exercise 3
 -- Example: sumDigits [16, 7, 12, 5] == 1 + 6 + 7 + 1 + 2 + 5 == 22
 sumDigits :: [Integer] -> Integer
 sumDigits = sum . concat . map toDigits
 
---
+-- Exercise 4
 -- Example: validate 4012888888881881 == True
 -- Example: validate 4012888888881882 == False
 -- Example: validate (-4012888888881882) == False
