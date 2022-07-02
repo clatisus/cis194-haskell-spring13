@@ -2,7 +2,7 @@
 
 module Exercise where
 
-import Data.List (sortBy, delete, nub, minimumBy)
+import Data.List (sortBy, delete, minimumBy)
 
 -- Exercise 1
 data List a = Nil | Cons a (List a)
@@ -87,11 +87,18 @@ cmpCross p a b = let cmp  = compare (realToFrac $ cross (b `sub` p) (a `sub` p))
                     then compare (dist p a) (dist p b)
                     else cmp
 
+nub :: (Eq a) => [a] -> [a]
+nub [] = []
+nub [a] = [a]
+nub (x:y:xs)
+  | x == y = nub (y:xs)
+  | otherwise = x : nub (y:xs)
+
 grahamScan :: [Point Double] -> [Point Double]
 grahamScan ps = let pivot    = minimumBy (\(Point ax ay) (Point bx by) ->
                                              let cmp = compare ay by
                                              in if cmp == EQ then compare ax bx else cmp) ps
-                    sortedPs = sortBy (cmpCross pivot) (delete pivot (nub ps)) -- nub is O(n^2)
+                    sortedPs = sortBy (cmpCross pivot) (delete pivot (nub ps))
                 in grahamScanImpl (tail sortedPs) [head sortedPs, pivot]
 
 -- remaining points -> stack points -> convex hull
