@@ -72,17 +72,17 @@ getDirectionBatch (x:y:z:xs) = (getDirection x y z) : getDirectionBatch (y:z:xs)
 
 -- Exercise 12
 -- Convex hull using Graham Scan algorithm
-sub :: Point Double -> Point Double -> Point Double
+sub :: (Point Double) -> (Point Double) -> Point Double
 sub (Point x1 y1) (Point x2 y2) = Point (x1 - x2) (y1 - y2)
 
 cross :: (Point Double) -> (Point Double) -> Double
 cross (Point ax ay) (Point bx by) = ax * by - ay * bx
 
 dist :: (Point Double) -> (Point Double) -> Double
-dist (Point ax ay) (Point bx by) = sqrt (realToFrac ((ax - bx) ^ (2 :: Int) + (ay - by) ^ (2 :: Int)))
+dist (Point ax ay) (Point bx by) = sqrt ((ax - bx) ^ (2 :: Int) + (ay - by) ^ (2 :: Int))
 
 cmpCross :: (Point Double) -> (Point Double) -> (Point Double) -> Ordering
-cmpCross p a b = let cmp  = compare (realToFrac $ cross (b `sub` p) (a `sub` p)) (0.0 :: Double)
+cmpCross p a b = let cmp  = compare (cross (b `sub` p) (a `sub` p)) 0.0
                  in if cmp == EQ
                     then compare (dist p a) (dist p b)
                     else cmp
@@ -98,14 +98,14 @@ grahamScan :: [Point Double] -> [Point Double]
 grahamScan ps = let pivot    = minimumBy (\(Point ax ay) (Point bx by) ->
                                              let cmp = compare ay by
                                              in if cmp == EQ then compare ax bx else cmp) ps
-                    sortedPs = sortBy (cmpCross pivot) (delete pivot (nub ps))
+                    sortedPs = delete pivot . nub . sortBy (cmpCross pivot) $ ps
                 in grahamScanImpl (tail sortedPs) [head sortedPs, pivot]
 
 -- remaining points -> stack points -> convex hull
 grahamScanImpl :: [Point Double] -> [Point Double] -> [Point Double]
 grahamScanImpl [] stack = stack
 grahamScanImpl (b:ps) [p] = grahamScanImpl ps [b, p]
-grahamScanImpl (b:ps) (p:a:stack) = let cmp = compare (realToFrac $ cross (p `sub` a) (b `sub` p)) (0.0 :: Double)
+grahamScanImpl (b:ps) (p:a:stack) = let cmp = compare (cross (p `sub` a) (b `sub` p)) 0.0
                                     in if cmp == GT
                                        then grahamScanImpl ps (b:p:a:stack)
                                        else grahamScanImpl (b:ps) (a:stack)
