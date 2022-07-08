@@ -7,7 +7,7 @@ import ExprT ( ExprT(..) )
 import Parser ( parseExp )
 import StackVM
     ( stackVM, StackVal, StackExp(Mul, PushI, Add), Program )
-import Data.Maybe (fromMaybe, fromJust, isNothing)
+import Data.Maybe (fromMaybe)
 import qualified Data.Map as M
 
 -------------------------------------------------------------------------------
@@ -98,16 +98,15 @@ class HasVars a where
 instance HasVars (M.Map String Integer -> Maybe Integer) where
   var = M.lookup
 
+callOnMaybe :: (a -> b -> c) -> Maybe a -> Maybe b -> Maybe c
+callOnMaybe _ Nothing _ = Nothing
+callOnMaybe _ _ Nothing = Nothing
+callOnMaybe f (Just a) (Just b) = Just $ f a b
+
 instance Expr (M.Map String Integer -> Maybe Integer) where
   lit x _ = Just x
   add x y m = callOnMaybe (+) (x m) (y m)
-    where callOnMaybe f a b
-            | isNothing a || isNothing b = Nothing
-            | otherwise                  = Just . f (fromJust a) $ fromJust b
   mul x y m = callOnMaybe (*) (x m) (y m)
-    where callOnMaybe f a b
-            | isNothing a || isNothing b = Nothing
-            | otherwise                  = Just . f (fromJust a) $ fromJust b
 
 withVars :: [(String, Integer)]
           -> (M.Map String Integer -> Maybe Integer)
