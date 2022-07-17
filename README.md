@@ -9,4 +9,3 @@ The solutions are all written by me, but after finished I often take a look at o
 
 If you are doing the course, hope this repo can help you the same. If you have any questions/improvements, feel free to contact me.
 
-To better aggregate all the resources about the course, I included some files (lectures, related books) that are publicly available in this repo. I did **NOT** create them.
